@@ -1,34 +1,41 @@
-package cache;
+package com.nvv.cache;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class FIFOCacheImpl<K, V> extends AbstractCache<K, V> {
+public class LRUCacheImpl<K, V> extends AbstractCache<K, V> {
 
-    protected Queue<CacheElement<K, V>> mCache = new ConcurrentLinkedQueue<CacheElement<K, V>>();
+    protected List<CacheElement<K, V>> mCache = new ArrayList<CacheElement<K, V>>();
 
-    public final synchronized void put(K key, V value) {
-
+    @Override
+    public void put(K key, V value) {
         CacheElement<K, V> element = mTable.get(key);
 
         if (updateCacheElement(element, key, value)) {
+            Collections.swap(mCache, mCache.indexOf(element), 0);
             return;
         }
 
         CacheElement<K, V> cacheElement = createCacheElement(key, value);
 
         if (isFull()) {
-            CacheElement<K, V> elem = mCache.poll();
+            CacheElement<K, V> elem = mCache.remove(mCache.size() - 1);
             mTable.remove(elem.getKey());
         }
 
-        mCache.offer(cacheElement);
+        mCache.add(0, cacheElement);
         mTable.put(key, cacheElement);
     }
 
+    @Override
     public final synchronized V get(K key) {
         CacheElement<K, V> element = mTable.get(key);
-        return element != null ? element.getValue() : null;
+        if (element != null) {
+            Collections.swap(mCache, mCache.indexOf(element), 0);
+            return element.getValue();
+        }
+        return null;
     }
 
     @Override

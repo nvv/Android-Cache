@@ -1,4 +1,4 @@
-package cache;
+package com.nvv.cache;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
