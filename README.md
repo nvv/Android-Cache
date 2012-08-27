@@ -1,4 +1,6 @@
 Android-Cache
 =============
 
-Different cache implementations
+Different cache implementations.
+
+Currently supported FIFO cache, LRU cache, LFU cache.
