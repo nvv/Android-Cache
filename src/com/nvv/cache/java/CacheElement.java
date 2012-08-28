@@ -1,4 +1,4 @@
-package com.nvv.cache;
+package com.nvv.cache.java;
 
 public class CacheElement<K, V> {
 

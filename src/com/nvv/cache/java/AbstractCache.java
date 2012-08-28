@@ -1,4 +1,4 @@
-package com.nvv.cache;
+package com.nvv.cache.java;
 
 import java.util.HashMap;
 import java.util.Map;
